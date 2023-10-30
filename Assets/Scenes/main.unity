@@ -556,6 +556,7 @@ GameObject:
   - component: {fileID: 655802016}
   - component: {fileID: 655802015}
   - component: {fileID: 655802014}
+  - component: {fileID: 655802019}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -580,9 +581,15 @@ MonoBehaviour:
   cameraHolder: {fileID: 1799295180}
   playerSettings:
     viewSensitivity: {x: 1, y: 1}
-    viewXInverted: 1
+    viewXInverted: 0
     viewYInverted: 0
+    walkingForwardSpeed: 4
+    walkingBackwardSpeed: 2
+    walkingStrafeSpeed: 3
   viewClampY: {x: -70, y: 80}
+  gravityAmount: 0.1
+  gravityMin: -3
+  playerGravity: 0
 --- !u!136 &655802015
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -600,7 +607,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.5
   m_Height: 2
@@ -664,7 +671,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 655802013}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.86, z: 0}
+  m_LocalPosition: {x: 0, y: 9.34, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -672,6 +679,32 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!143 &655802019
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 655802013}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
