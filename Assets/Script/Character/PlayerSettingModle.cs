@@ -3,6 +3,14 @@ using UnityEngine;
 
 namespace Character
 {
+
+    public enum PlayerStance
+    {
+        Stand,
+        Crouch,
+        Prone
+    }
+    
     [Serializable]
     public class PlayerSettingModle
     {
@@ -21,6 +29,14 @@ namespace Character
         public float jumpingHeight;
 
         public float jumpingFalloff;
+
+    }
+
+    [System.Serializable]
+    public class CharacterStance
+    {
+        public float CameraHeight;
+        public CapsuleCollider StanceCollider;
 
     }
 }

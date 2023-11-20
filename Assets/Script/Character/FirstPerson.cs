@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Character
@@ -28,6 +29,20 @@ namespace Character
         public Vector3 jumpingForce;
         public Vector3 jumpingForceVelocity;
 
+
+        [Header("Stance")] [SerializeField] private PlayerStance playerStance;
+        [SerializeField] private float playerStanceSmoothing;
+
+        [SerializeField] private float cameraStandHigh;
+        [SerializeField] private float cameraCrouchHigh;
+        [SerializeField] private float cameraProneHigh;
+        public CharacterStance characterStandStance;
+        public CharacterStance characterCrouchStance;
+        public CharacterStance characterProneStance;
+        
+        private float cameraHigh;
+        private float cameraHighVelocity;
+
         private void Awake()
         {
             Cursor.lockState = CursorLockMode.Locked;
@@ -43,6 +58,8 @@ namespace Character
 
             newCameraRotation = cameraHolder.localRotation.eulerAngles;
             newCharacterRotation = transform.localRotation.eulerAngles;
+
+            cameraHigh = cameraHolder.localPosition.y;
         }
 
         private void Start()
@@ -55,6 +72,7 @@ namespace Character
             CalculateView();
             CalculateMovement();
             CalculateJump();
+            CalculateCameraHeight();
         }
 
 
@@ -82,19 +100,14 @@ namespace Character
             newMovementSpeed = transform.TransformDirection(newMovementSpeed);
 
 
-            if (_playerGravity > gravityMin && jumpingForce.y < 0.1f)
+            if (_playerGravity > gravityMin)
             {
                 _playerGravity -= gravityAmount * Time.deltaTime;
             }
 
-            if (_playerGravity < -1 && _characterController.isGrounded)
+            if (_playerGravity < -0.1f && _characterController.isGrounded)
             {
-                _playerGravity = -1;
-            }
-
-            if (jumpingForce.y > 0.1f)
-            {
-                _playerGravity = 0;
+                _playerGravity = -0.1f;
             }
 
             newMovementSpeed.y += _playerGravity;
@@ -110,6 +123,30 @@ namespace Character
                 playerSettings.jumpingFalloff);
         }
 
+        public void CalculateCameraHeight()
+        {
+            var StanceHight = cameraStandHigh;
+
+            switch (playerStance)
+            {
+                case PlayerStance.Crouch:
+                    StanceHight = cameraCrouchHigh;
+                    break;
+                case PlayerStance.Prone:
+                    StanceHight = cameraProneHigh;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            cameraHigh = Mathf.SmoothDamp(cameraHolder.localPosition.y, cameraStandHigh,
+                ref StanceHight, playerStanceSmoothing);
+
+            cameraHolder.localPosition =
+                new Vector3(cameraHolder.localPosition.x, cameraHigh, cameraHolder.localPosition.z);
+        }
+
+
         private void Jump()
         {
             if (!_characterController.isGrounded)
@@ -119,6 +156,7 @@ namespace Character
 
             // jump
             jumpingForce = Vector3.up * playerSettings.jumpingHeight;
+            _playerGravity = 0;
         }
     }
 }
